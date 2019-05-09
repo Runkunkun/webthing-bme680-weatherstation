@@ -13,7 +13,7 @@ class WeatherstationBME680(Thing):
                        ['MultiLevelSensor'],
                        'A web connected weatherstation')
 
-        self.level = Value('Default')
+        self.level = Value(0.0)
         self.add_property(
             Property(
                 self,
@@ -22,8 +22,11 @@ class WeatherstationBME680(Thing):
                 metadata={
                     '@type': 'LevelProperty',
                     'title': 'Air Quality',
-                    'type': 'string',
+                    'type': 'number',
                     'description': 'The current air quality',
+                    'minimum': 0,
+                    'maximum': 100,
+                    'unit': 'percent',
                     'readOnly': True,
                 }))
 
@@ -55,6 +58,9 @@ class WeatherstationBME680(Thing):
                     'title': 'Temperature',
                     'type': 'number',
                     'description': 'The current temperature',
+                    'minimum': -20,
+                    'maximum': 80,
+                    'unit': 'degree celsius',
                     'readOnly': True,
                 }))
 
@@ -69,6 +75,9 @@ class WeatherstationBME680(Thing):
                     'title': 'Air Pressure',
                     'type': 'number',
                     'description': 'The current air pressure',
+                    'minimum': 600,
+                    'maximum': 1200,
+                    'unit': 'pascal',
                     'readOnly': True,
                 }))
 
@@ -80,21 +89,22 @@ class WeatherstationBME680(Thing):
         self.timer.start()
 
     def update_levels(self):
-        new_level = sensorBME680.update_air_quality()
-        logging.debug('setting new air quality: %s', new_level)
-        self.level.notify_of_external_update(new_level)
+        if sensorBME680.sensor.get_sensor_data():
+            new_level = sensorBME680.update_air_quality()
+            logging.debug('setting new air quality: %s', new_level)
+            self.level.notify_of_external_update(new_level)
 
-        new_humidity = sensorBME680.update_humidity()
-        logging.debug('setting new humidity: %s', new_humidity)
-        self.humidity.notify_of_external_update(new_humidity)
+            new_humidity = sensorBME680.update_humidity()
+            logging.debug('setting new humidity: %s', new_humidity)
+            self.humidity.notify_of_external_update(new_humidity)
 
-        new_temperature = sensorBME680.update_temperature()
-        logging.debug('setting new temperature: %s', new_temperature)
-        self.temperature.notify_of_external_update(new_temperature)
+            new_temperature = sensorBME680.update_temperature()
+            logging.debug('setting new temperature: %s', new_temperature)
+            self.temperature.notify_of_external_update(new_temperature)
 
-        new_pressure = sensorBME680.update_pressure()
-        logging.debug('setting new air pressure: %s', new_pressure)
-        self.pressure.notify_of_external_update(new_pressure)
+            new_pressure = sensorBME680.update_pressure()
+            logging.debug('setting new air pressure: %s', new_pressure)
+            self.pressure.notify_of_external_update(new_pressure)
 
     def cancel_update_level_task(self):
         self.timer.stop()

@@ -12,42 +12,31 @@ sensor.set_gas_heater_temperature(320)
 sensor.set_gas_heater_duration(150)
 sensor.select_gas_heater_profile(0)
 
+
 def update_temperature():
-    if not sensor.get_sensor_data():
-        output = sensor.data.temperature
-        return output
-    else:
-        return 999
+    output = sensor.data.temperature
+    return output
 
 
 def update_humidity():
-    if sensor.get_sensor_data():
-        output = sensor.data.humidity
-        return output
-    else:
-       return -1
+    output = sensor.data.humidity
+    return output
 
 
 def update_pressure():
-    if sensor.get_sensor_data():
-        output = sensor.data.pressure
-        return output
-    else:
-        return 0
+    output = sensor.data.pressure
+    return output
 
 
 def update_gas_resistance():
-    if sensor.get_sensor_data():
-        if sensor.data.heat_stable():
-            output = sensor.data.gas_resistance
-            return output
-    else:
-        return -1
+    if sensor.data.heat_stable():
+        output = sensor.data.gas_resistance
+        return output
 
 
 def update_air_quality():
     hum_baseline = 40
-    gas_baseline = 50000
+    gas_baseline = 500000
 
     hum = update_humidity()
     gas = update_gas_resistance()
@@ -76,17 +65,4 @@ def update_air_quality():
         gas_score = 100 - (0.75 * 100)
 
     air_quality_score = hum_score + gas_score
-
-    if 20 > air_quality_score >= 0:
-        return "Very Bad"
-    else:
-        if 40 > air_quality_score >= 20:
-            return "Bad"
-        else:
-            if 60 > air_quality_score >= 40:
-                return "Little Bad"
-            else:
-                if 80 > air_quality_score >= 60:
-                    return "Average"
-                else:
-                    return "Good"
+    return air_quality_score
