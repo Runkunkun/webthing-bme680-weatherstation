@@ -29,9 +29,8 @@ def update_pressure():
 
 
 def update_gas_resistance():
-    if sensor.data.heat_stable():
-        output = sensor.data.gas_resistance
-        return output
+    output = sensor.data.gas_resistance
+    return output
 
 
 def update_air_quality():
