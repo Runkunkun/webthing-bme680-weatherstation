@@ -30,12 +30,13 @@ def update_pressure():
 
 def update_gas_resistance():
     output = sensor.data.gas_resistance
+    print(output)
     return output
 
 
 def update_air_quality():
     hum_baseline = 40
-    gas_baseline = 50000
+    gas_baseline = 250000
 
     hum = update_humidity()
     gas = update_gas_resistance()
@@ -45,21 +46,22 @@ def update_air_quality():
     gas_offset = gas_baseline - gas
 
     if hum_offset > 0:
-        hum_score = (100 - hum_baseline - hum_offset)
-        hum_score /= (100 - hum_baseline)
-        hum_score *= (0.30 * 100)
+        hum_score = (hum_baseline / hum)
+        hum_score *= (0.25 * 100)
 
     else:
-        hum_score = (hum_baseline + hum_offset)
-        hum_score /= hum_baseline
-        hum_score *= (0.30 * 100)
+        if hum_offset < 0:
+            hum_score = (hum / hum_baseline)
+            hum_score *= (0.25 * 100)
+        else:
+            hum_score = 0.25
 
     if gas_offset > 0:
         gas_score = (gas / gas_baseline)
-        gas_score *= (100 - (0.70 * 100))
+        gas_score *= (0.75 * 100)
 
     else:
-        gas_score = 100 - (0.70 * 100)
+        gas_score = 0.75
 
     air_quality_score = hum_score + gas_score
     return air_quality_score
