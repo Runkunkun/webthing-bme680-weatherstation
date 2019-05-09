@@ -1,0 +1,11 @@
+attrs==19.1.0
+bme680==1.0.5
+ifaddr==0.1.6
+jsonschema==3.0.1
+pyee==6.0.0
+pyrsistent==0.15.1
+six==1.12.0
+tornado==6.0.2
+webthing==0.11.3
+zeroconf==0.22.0
+smbus==1.1.post2
