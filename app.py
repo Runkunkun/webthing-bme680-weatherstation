@@ -7,8 +7,6 @@ import weatherstationbme680
 def run_server():
     weatherstation = weatherstationbme680.WeatherstationBME680()
 
-    # If adding more than one thing, use MultipleThings() with a name.
-    # In the single thing case, the thing's name will be broadcast.
     server = WebThingServer(SingleThing(weatherstation), port=8888)
     try:
         logging.info('starting the server')

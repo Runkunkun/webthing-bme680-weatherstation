@@ -1,8 +1,6 @@
 from __future__ import division
-from webthing import (Action, Event, Property, SingleThing, Thing, Value)
+from webthing import (Property, Thing, Value)
 import logging
-import time
-import uuid
 import tornado.ioloop
 import sensorBME680
 
@@ -29,17 +27,74 @@ class WeatherstationBME680(Thing):
                     'readOnly': True,
                 }))
 
+        self.humidity = Value(0.0)
+        self.add_property(
+            Property(
+                self,
+                'humidity',
+                self.humidity,
+                metadata={
+                    '@type': 'LevelProperty',
+                    'title': 'Humidity',
+                    'type': 'number',
+                    'description': 'Humidity in %',
+                    'minimum': 0,
+                    'maximum': 100,
+                    'unit': 'percent',
+                    'readOnly': True,
+                }))
+
+        self.temperature = Value(0.0)
+        self.add_property(
+            Property(
+                self,
+                'temperature',
+                self.temperature,
+                metadata={
+                    '@type': 'LevelProperty',
+                    'title': 'Temperature',
+                    'type': 'number',
+                    'description': 'The current temperature',
+                    'readOnly': True,
+                }))
+
+        self.pressure = Value(0.0)
+        self.add_property(
+            Property(
+                self,
+                'pressure',
+                self.pressure,
+                metadata={
+                    '@type': 'LevelProperty',
+                    'title': 'Air Pressure',
+                    'type': 'number',
+                    'description': 'The current air pressure',
+                    'readOnly': True,
+                }))
+
         logging.debug('starting the sensor update looping task')
         self.timer = tornado.ioloop.PeriodicCallback(
-            self.update_level,
+            self.update_levels,
             3000
         )
         self.timer.start()
 
-    def update_level(self):
+    def update_levels(self):
         new_level = sensorBME680.update_air_quality()
         logging.debug('setting new air quality: %s', new_level)
         self.level.notify_of_external_update(new_level)
+
+        new_humidity = sensorBME680.update_humidity()
+        logging.debug('setting new humidity: %s', new_humidity)
+        self.humidity.notify_of_external_update(new_humidity)
+
+        new_temperature = sensorBME680.update_temperature()
+        logging.debug('setting new temperature: %s', new_temperature)
+        self.temperature.notify_of_external_update(new_temperature)
+
+        new_pressure = sensorBME680.update_pressure()
+        logging.debug('setting new air pressure: %s', new_pressure)
+        self.pressure.notify_of_external_update(new_pressure)
 
     def cancel_update_level_task(self):
         self.timer.stop()
