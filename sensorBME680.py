@@ -35,13 +35,11 @@ def update_gas_resistance():
 
 def update_air_quality():
     hum_baseline = 40
-    gas_baseline = 500000
+    gas_baseline = 50000
 
     hum = update_humidity()
     gas = update_gas_resistance()
 
-    if hum == -1 or gas == 0:
-        return "Unknown"
 
     hum_offset = hum - hum_baseline
     gas_offset = gas_baseline - gas
@@ -49,19 +47,19 @@ def update_air_quality():
     if hum_offset > 0:
         hum_score = (100 - hum_baseline - hum_offset)
         hum_score /= (100 - hum_baseline)
-        hum_score *= (0.25 * 100)
+        hum_score *= (0.30 * 100)
 
     else:
         hum_score = (hum_baseline + hum_offset)
         hum_score /= hum_baseline
-        hum_score *= (0.25 * 100)
+        hum_score *= (0.30 * 100)
 
     if gas_offset > 0:
         gas_score = (gas / gas_baseline)
-        gas_score *= (100 - (0.75 * 100))
+        gas_score *= (100 - (0.70 * 100))
 
     else:
-        gas_score = 100 - (0.75 * 100)
+        gas_score = 100 - (0.70 * 100)
 
     air_quality_score = hum_score + gas_score
     return air_quality_score

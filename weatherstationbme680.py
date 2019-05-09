@@ -77,7 +77,7 @@ class WeatherstationBME680(Thing):
                     'description': 'The current air pressure',
                     'minimum': 600,
                     'maximum': 1200,
-                    'unit': 'pascal',
+                    'unit': 'hPa',
                     'readOnly': True,
                 }))
 
