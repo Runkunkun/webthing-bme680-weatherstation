@@ -9,3 +9,5 @@
 <li>Bosch BME680 Breakoutboard</li>
 <li>Webthings Gateway</li>
 </ul>
+
+<p>For instructions for how to setup the project please visit the <a href="https://github.com/Runkunkun/webthing-bme680-weatherstation/wiki">wiki</a></p>
