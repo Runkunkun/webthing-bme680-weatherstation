@@ -10,7 +10,7 @@ class WeatherstationBME680(Thing):
     def __init__(self):
         Thing.__init__(self,
                        'Indoor Weatherstation',
-                       ['MultiLevelSensor'],
+                       ['MultiLevelSensor', 'TemperatureSensor'],
                        'A web connected weatherstation')
 
         self.level = Value(0.0)
@@ -37,7 +37,6 @@ class WeatherstationBME680(Thing):
                 'humidity',
                 self.humidity,
                 metadata={
-                    '@type': 'LevelProperty',
                     'title': 'Humidity',
                     'type': 'number',
                     'description': 'Humidity in %',
@@ -54,7 +53,7 @@ class WeatherstationBME680(Thing):
                 'temperature',
                 self.temperature,
                 metadata={
-                    '@type': 'LevelProperty',
+                    '@type': 'TemperatureProperty',
                     'title': 'Temperature',
                     'type': 'number',
                     'description': 'The current temperature',
@@ -71,7 +70,6 @@ class WeatherstationBME680(Thing):
                 'pressure',
                 self.pressure,
                 metadata={
-                    '@type': 'LevelProperty',
                     'title': 'Air Pressure',
                     'type': 'number',
                     'description': 'The current air pressure',
