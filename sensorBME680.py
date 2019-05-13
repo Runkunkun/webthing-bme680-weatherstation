@@ -36,7 +36,7 @@ def update_gas_resistance():
 
 def update_air_quality():
     hum_baseline = 40
-    gas_baseline = 250000
+    gas_baseline = 520000
 
     hum = update_humidity()
     gas = update_gas_resistance()
